@@ -1,0 +1,10 @@
+{:itonami.blueprint/id "cloud-itonami-isco-6222"
+ :itonami.blueprint/name "Independent Small-Scale Fishery Operations"
+ :itonami.blueprint/isco-08 "6222"
+ :itonami.blueprint/domain :agriculture/fishery
+ :itonami.blueprint/license "AGPL-3.0-or-later"
+ :itonami.blueprint/social-impact [:food-security :rural-livelihoods :environment]
+ :itonami.blueprint/governor :fishery-governor
+ :itonami.blueprint/robotics true
+ :itonami.blueprint/required-technologies [:robotics :telemetry :forms :dmn :bpmn :audit-ledger]
+ :itonami.blueprint/status :public-oss}
