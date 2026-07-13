@@ -2,6 +2,27 @@
 
 Open Occupation Blueprint for **ISCO-08 6222**: Inland and Coastal Waters Fishery Workers.
 
+**Maturity: `:implemented`** — FisheryAdvisor ⊣ FisheryGovernor as a
+langgraph StateGraph (`intake → advise → govern → decide →
+commit/hold`, human-approval interrupt), modeled on
+cloud-itonami-isco-4311's bookkeeping actor. 14 tests / 29 assertions
+green. The governor never dispatches hardware — it only gates what
+the net-monitoring/catch-sorting robot below may execute.
+
+The catch HARD invariants — arithmetic and set exclusion, not
+discretion:
+
+1. **Quota ceiling** — a proposed catch must not exceed the
+   registered remaining quota (quota is a legal allocation, not a
+   target to approach).
+2. **Protected-zone exclusion** — a proposed catch's zone must NOT be
+   a member of the registered protected-species-zones set.
+
+`:approve-vessel-operation` and `:report-bycatch-incident` **always**
+escalate to human sign-off regardless of confidence, per this repo's
+Trust Controls (business-model.md) — bycatch incidents can never be
+suppressed.
+
 This repository designs a forkable OSS business for an independent small-scale inland/coastal fishery worker: a net-monitoring and catch-sorting robot performs gear checks and catch documentation under a governor-gated actor, so the operator keeps their own catch and quota records instead of renting a closed fishery-management SaaS.
 
 ## Robotics premise
