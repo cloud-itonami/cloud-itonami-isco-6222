@@ -1,0 +1,34 @@
+;; What this vertical's robot physically does, declared for
+;; kotoba.robotics.process (kotoba-lang/robotics). `kbb -M:physics` runs it.
+;;
+;; README "Robotics premise": a net-monitoring and catch-sorting robot performs
+;; gear checks and catch documentation for inland and coastal waters fishery
+;; workers (ISCO 6222). Its physical work here: moving sorted fish from the
+;; sorting table into iced crates, and chilling the catch in ice slurry until
+;; the fish core approaches melting-ice temperature.
+;;
+;; Every number without a cited source is marked `estimate` in its :basis.
+;; Replacing an estimate with a sourced value is this bot's growth work.
+{:physics/schema "itonami.physical-ai.spec.v1"
+ :repo "cloud-itonami/cloud-itonami-isco-6222"
+ :cases
+ [{:id :sorted-fish-into-crate
+   :kind :manipulator
+   :procedure "catch-sorting arm lifts sorted fish from the sorting table into an iced crate"
+   :params {:l1-m 0.45 :l2-m 0.40 :m1-kg 4.0 :m2-kg 2.5
+            :from [0.55 0.10] :to [0.25 -0.25] :duration-s 1.2 :steps 400}
+   :sweep {:param :payload-kg :values [0.5 1.0 2.0 4.0 6.0]}
+   :quantity :peak-tau1-nm
+   :limit {:max 45.0 :basis "estimate: continuous shoulder torque of a ~5 kg payload class washdown-rated arm"}
+   :boundary {:lo 0.1 :hi 25.0}}
+  {:id :catch-chilling-in-ice-slurry
+   :kind :thermal
+   :procedure "catch documentation: fish (modelled as a slab, thickness = half the fish thickness, centre-plane adiabatic) chilled 2 h in ice slurry from 15 °C; centre temperature"
+   :params {:conductivity-w-mk 0.50 :density-kg-m3 1050.0 :specific-heat-j-kgk 3600.0
+            :t0-c 15.0 :t-hot-c 0.0 :h-front-w-m2k 200.0
+            :t-back-ambient-c 15.0 :h-back-w-m2k 0.0
+            :threshold-c 100.0 :duration-s 7200.0}
+   :sweep {:param :thickness-m :values [0.010 0.020 0.030 0.040 0.050]}
+   :quantity :final-back-c
+   :limit {:max 4.0 :basis "estimate: fresh fish is to be kept at a temperature approaching that of melting ice; a 4 °C centre after 2 h in slurry is taken as the working target"}
+   :boundary {:lo 0.005 :hi 0.08}}]}
